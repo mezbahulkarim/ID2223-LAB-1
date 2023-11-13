@@ -69,7 +69,7 @@ def g():
     monitor_df = pd.DataFrame(data)                                                 
     monitor_fg.insert(monitor_df, write_options={"wait_for_job" : False})           #INSERTS OUR PREDICTED vs ACTUAL 'data' value into the feature store
     
-    history_df = monitor_fg.read()                                                  #SHOW recent history from iris-predictions feature group
+    history_df = monitor_fg.read()                                                  #SHOW recent history from wine-predictions feature group
     # Add our prediction to the history, as the history_df won't have it - 
     # the insertion was done asynchronously, so it will take ~1 min to land on App
     history_df = pd.concat([history_df, monitor_df])
