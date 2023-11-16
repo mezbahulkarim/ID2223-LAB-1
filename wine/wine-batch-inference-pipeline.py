@@ -1,10 +1,11 @@
 #REPLACE WITH YOUR OWN KEY VALUE
-key_value = "ENTER VALUE"
+key_value = "ENTER_VALUE"
 
-# CHANGE THE IMAGE UPLOAD FUNCTIONALITY IF WANTED LATER 
-#"modal token new"  ->      RUN THIS COMMAND IN VIRTUAL_ENV/CONDA  ONE TIME BEFORE RUNNING THIS FILE, it will link your modal account to this code
-import os                       #overall this code will make inference, store predicted vs actual in feature store and show confusion matrix, also saves images to hopsworks resources
-import modal
+# Overall this code will make inference, store predicted vs. actual in feature store and show confusion matrix, also saves images to hopsworks /Resources
+
+#"modal token new"  ->  Link Modal Account if seeing token error
+import os      
+import modal                 
 
 LOCAL=False      #LOCAL=False for running on modal etc.
 
@@ -31,35 +32,42 @@ def g():
     project = hopsworks.login(api_key_value=key_value)
     fs = project.get_feature_store()
     
+    # Download the model saved 
     mr = project.get_model_registry()
     model = mr.get_model("wine_model", version=1)
     model_dir = model.download()
     model = joblib.load(model_dir + "/wine_model.pkl")
     
+    #Get Batch Data
     feature_view = fs.get_feature_view(name="wine", version=1)
     batch_data = feature_view.get_batch_data()
-                                                                                #FLOWER variable is prediction LABEL variable is actual/true value
+    print("Printing batch data:")
+    print(batch_data)
+    print("-----------------------------------------------------------")
+
+    # Make the prediction and get a single value from the whole list of predicted values
     y_pred = model.predict(batch_data)
-    print(y_pred)
     offset = 1
     pred_quality = y_pred[y_pred.size-offset]
+    print("printing y_pred or total predictions: ")
+    print(y_pred)
+    print("-----------------------------------------------------------")
     print("Quality predicted: " + str(pred_quality))
-    
-    #Not uploading any images, simply predicting wine quality no need
-    #dataset_api = project.get_dataset_api()    
-    #dataset_api.upload("./latest_iris.png", "Resources/images", overwrite=True)
-   
+
+    # Gets the actual value from the feature store -> feature group 
     wine_fg = fs.get_feature_group(name="wine", version=1)
     df = wine_fg.read() 
-    print(df)
+    print(df)                                               #Notice how batch data is the same as this, thus offset will lead to same row for true value
     true_quality = df.iloc[-offset]["quality"]
     print("Quality actual: " + str(true_quality))   
+
+    # Make a feature group for the predicions after inferences
     monitor_fg = fs.get_or_create_feature_group(name="wine_predictions",
                                                 version=1,
                                                 primary_key=["datetime"],
                                                 description="Wine Quality Prediction/Outcome Monitoring"
                                                 )
-    
+    # Make a dataframe for current prediction and insert it to the feature "wine predictions" feature group
     now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     data = {
         'prediction': [pred_quality],
@@ -74,14 +82,15 @@ def g():
     # the insertion was done asynchronously, so it will take ~1 min to land on App
     history_df = pd.concat([history_df, monitor_df])
 
-
+    # Upload the recent history to /Resources/images in hopsworks
     df_recent = history_df.tail(4)
     dfi.export(df_recent, './df_recent.png', table_conversion = 'matplotlib')
     dataset_api = project.get_dataset_api()  
     dataset_api.upload("./df_recent.png", "Resources/images", overwrite=True)
     
+    # These values are used as x and y values in confusion matrix later, true values are labels, predicted values are predictions
     predictions = history_df[['prediction']]
-    labels = history_df[['label']]                                                  #history ends here
+    labels = history_df[['label']]                                                  
 
     # Create confusion matrix
     print("Number of different wine predictions to date: " + str(predictions.value_counts().count()))
@@ -103,6 +112,7 @@ if __name__ == "__main__":
     if LOCAL == True :
         g()
     else:
+        modal.runner.deploy_stub(stub)
         with stub.run():
-            print(f.remote())           #CHANGED THIS TO SHOW PRINTS 
+            print(f.remote())           #SHOWS PRINTS
 

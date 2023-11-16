@@ -1,3 +1,6 @@
+#REPLACE WITH YOUR OWN KEY VALUE
+key_value = "KEY_VALUE"
+
 import os
 import modal
 
@@ -64,7 +67,7 @@ def g():
     import hopsworks
     import pandas as pd
 
-    project = hopsworks.login(api_key_value="otTMjER8L0vKuLAy.WtpeEpUCmJ4eHtcjHvxz7ZJjFvCQdh2eHdJt6C6Rnpw5vJERca5tYQAxDX7Df8Ub")
+    project = hopsworks.login(api_key_value=key_value)
     fs = project.get_feature_store()
 
     wine_df = get_random_wine()
@@ -76,6 +79,6 @@ if __name__ == "__main__":
     if LOCAL == True :
         g()
     else:
-        stub.deploy("wine_daily")
+        modal.runner.deploy_stub(stub)
         with stub.run():
-            f()
+            print(f.remote())

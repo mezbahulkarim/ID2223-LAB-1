@@ -5,7 +5,7 @@ import hopsworks
 import joblib
 import pandas as pd
 
-key_value = "otTMjER8L0vKuLAy.WtpeEpUCmJ4eHtcjHvxz7ZJjFvCQdh2eHdJt6C6Rnpw5vJERca5tYQAxDX7Df8Ub"
+key_value = "ENTER_VALUE"
 project = hopsworks.login(api_key_value=key_value)
 fs = project.get_feature_store()
 
