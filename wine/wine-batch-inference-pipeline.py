@@ -1,11 +1,14 @@
-#REPLACE WITH YOUR OWN KEY VALUE
-key_value = "ENTER_VALUE"
-
 # Overall this code will make inference, store predicted vs. actual in feature store and show confusion matrix, also saves images to hopsworks /Resources
 
 #"modal token new"  ->  Link Modal Account if seeing token error
 import os      
-import modal                 
+import modal     
+from dotenv import load_dotenv, dotenv_values
+
+# REPLACE .env WITH YOUR OWN KEY_VALUE
+config = dotenv_values(".env")
+key_value = config["KEY"]
+#print(key_value)
 
 LOCAL=False      #LOCAL=False for running on modal etc.
 
@@ -84,9 +87,9 @@ def g():
 
     # Upload the recent history to /Resources/images in hopsworks
     df_recent = history_df.tail(4)
-    dfi.export(df_recent, './df_recent.png', table_conversion = 'matplotlib')
+    dfi.export(df_recent, './wine_df_recent.png', table_conversion = 'matplotlib')
     dataset_api = project.get_dataset_api()  
-    dataset_api.upload("./df_recent.png", "Resources/images", overwrite=True)
+    dataset_api.upload("./wine_df_recent.png", "Resources/images", overwrite=True)
     
     # These values are used as x and y values in confusion matrix later, true values are labels, predicted values are predictions
     predictions = history_df[['prediction']]

@@ -1,8 +1,11 @@
-#REPLACE WITH YOUR OWN KEY VALUE
-key_value = "KEY_VALUE"
-
 import os
 import modal
+from dotenv import load_dotenv, dotenv_values
+
+# REPLACE .env WITH YOUR OWN KEY_VALUE
+config = dotenv_values(".env")
+key_value = config["KEY"]
+#print(key_value)
 
 LOCAL=False
 

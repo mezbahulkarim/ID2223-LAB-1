@@ -11,8 +11,13 @@ from sklearn.metrics import confusion_matrix
 from matplotlib import pyplot
 import seaborn as sns
 import requests
+from dotenv import load_dotenv, dotenv_values
 
-key_value = "ENTER_VALUE"
+# REPLACE .env WITH YOUR OWN KEY_VALUE
+config = dotenv_values(".env")
+key_value = config["KEY"]
+#print(key_value)
+
 project = hopsworks.login(api_key_value=key_value)
 fs = project.get_feature_store()
     
@@ -23,7 +28,7 @@ model = joblib.load(model_dir + "/wine_model.pkl")
     
 feature_view = fs.get_feature_view(name="wine", version=1)
 batch_data = feature_view.get_batch_data()
-                                                                                #FLOWER variable is prediction LABEL variable is actual/true value
+                                                                                
 y_pred = model.predict(batch_data)
 print(y_pred)
 print("----------------------------------------------------------------------------------")
@@ -36,7 +41,7 @@ print(df)
 true_quality = df.iloc[-offset]["quality"]
 
 dataset_api = project.get_dataset_api()
-dataset_api.download("Resources/images/df_recent.png")
+dataset_api.download("Resources/images/wine_df_recent.png")
 dataset_api.download("Resources/images/wine_confusion_matrix.png")
 
 with gr.Blocks() as demo:
@@ -50,7 +55,7 @@ with gr.Blocks() as demo:
     with gr.Row():
       with gr.Column():
           gr.Label("Recent Prediction History")
-          input_img = gr.Image("df_recent.png", elem_id="recent-predictions")
+          input_img = gr.Image("wine_df_recent.png", elem_id="recent-predictions")
       with gr.Column():          
           gr.Label("Confusion Maxtrix with Historical Prediction Performance")
           input_img = gr.Image("wine_confusion_matrix.png", elem_id="confusion-matrix")        
