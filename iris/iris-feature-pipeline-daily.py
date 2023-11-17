@@ -1,7 +1,8 @@
+key_value = "ENTER_VALUE"
+
 import os
 import modal
 
-#modal deploy <name of this file>
 LOCAL=False #set to false to run on modal
 
 if LOCAL == False:
@@ -60,7 +61,7 @@ def g():
     import hopsworks
     import pandas as pd
 
-    project = hopsworks.login(api_key_value="enter_value")
+    project = hopsworks.login(api_key_value=key_value)
     fs = project.get_feature_store()
 
     iris_df = get_random_iris_flower()
@@ -72,6 +73,7 @@ if __name__ == "__main__":
     if LOCAL == True :
         g()
     else:
-        #stub.deploy("iris_daily")      #WHY USE THIS IT DOESN'T EVEN EXIST
+        modal.runner.deploy_stub(stub)
         with stub.run():
-            print(f.remote())       #CHANGED 
+            print(f.remote())           #SHOWS PRINTS
+

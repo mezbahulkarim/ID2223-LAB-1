@@ -1,3 +1,5 @@
+key_value = "ENTER_VALUE"
+
 import gradio as gr
 from PIL import Image
 import requests
@@ -5,7 +7,7 @@ import hopsworks
 import joblib
 import pandas as pd
 
-project = hopsworks.login(api_key_value="enter_value")
+project = hopsworks.login(api_key_value=key_value)
 fs = project.get_feature_store()
 
 
@@ -28,6 +30,7 @@ def iris(sepal_length, sepal_width, petal_length, petal_width):
     # the first element.
 #     print("Res: {0}").format(res)
     print(res)
+    print(res[res.size-1])
     flower_url = "https://raw.githubusercontent.com/featurestoreorg/serverless-ml-course/main/src/01-module/assets/" + res[0] + ".png"
     img = Image.open(requests.get(flower_url, stream=True).raw)            
     return img

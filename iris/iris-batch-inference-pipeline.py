@@ -1,5 +1,9 @@
-#"modal token new"  ->      RUN THIS COMMAND IN VIRTUAL_ENV/CONDA  ONE TIME BEFORE RUNNING THIS FILE, it will link your modal account to this code
-import os                       #overall this code will make inference, store predicted vs actual in feature store and show confusion matrix, also saves images to hopsworks resources
+key_value = "ENTER_VALUE"
+
+# Overall this code will make inference, store predicted vs. actual in feature store and show confusion matrix, also saves images to hopsworks /Resources
+
+#"modal token new"  ->  Link Modal Account if seeing token error
+import os                     
 import modal
     
 LOCAL=False      #LOCAL=False for running on modal etc.
@@ -24,7 +28,7 @@ def g():
     import seaborn as sns
     import requests
 
-    project = hopsworks.login(api_key_value="enter_value")
+    project = hopsworks.login(api_key_value=key_value)
     fs = project.get_feature_store()
     
     mr = project.get_model_registry()
@@ -34,7 +38,7 @@ def g():
     
     feature_view = fs.get_feature_view(name="iris", version=1)
     batch_data = feature_view.get_batch_data()
-                                                                                #FLOWER variable is prediction LABEL variable is actual/true value
+                                                                                #FLOWER variable is prediction, LABEL variable is actual/true value
     y_pred = model.predict(batch_data)
     print(y_pred)
     offset = 1
@@ -105,6 +109,7 @@ if __name__ == "__main__":
     if LOCAL == True :
         g()
     else:
+        modal.runner.deploy_stub(stub)
         with stub.run():
-            print(f.remote())           #CHANGED THIS TO SHOW PRINTS 
+            print(f.remote())           #SHOWS PRINTS
 

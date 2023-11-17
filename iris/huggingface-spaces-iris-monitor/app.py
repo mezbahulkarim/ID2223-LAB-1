@@ -1,8 +1,10 @@
+key_value = "ENTER_VALUE"
+
 import gradio as gr
 from PIL import Image
 import hopsworks
 
-project = hopsworks.login(api_key_value="enter_value")
+project = hopsworks.login(api_key_value=key_value)
 fs = project.get_feature_store()
 
 dataset_api = project.get_dataset_api()
