@@ -12,9 +12,10 @@ from matplotlib import pyplot
 import seaborn as sns
 import requests
 from dotenv import load_dotenv, dotenv_values
+import random
 
 # REPLACE .env WITH YOUR OWN KEY_VALUE
-config = dotenv_values(".env")
+config = dotenv_values("../.env")
 key_value = config["KEY"]
 #print(key_value)
 
@@ -32,17 +33,22 @@ batch_data = feature_view.get_batch_data()
 y_pred = model.predict(batch_data)
 print(y_pred)
 print("----------------------------------------------------------------------------------")
-offset = 1
-pred_quality = y_pred[y_pred.size-offset]
+# Setting Offset Value    
+offset = y_pred.shape[0]
+print(f'Offset: {offset}')              # number of rows
+offset = offset -1                      # account for index value
+random_offset = random.randint(0, offset)
+
+pred_quality = y_pred[random_offset]
 
 wine_fg = fs.get_feature_group(name="wine", version=1)
 df = wine_fg.read() 
 print(df)
-true_quality = df.iloc[-offset]["quality"]
+true_quality = df.iloc[-random_offset]["quality"]
 
 dataset_api = project.get_dataset_api()
-dataset_api.download("Resources/images/wine_df_recent.png")
-dataset_api.download("Resources/images/wine_confusion_matrix.png")
+dataset_api.download("Resources/images/wine_df_recent.png", overwrite=True)
+dataset_api.download("Resources/images/wine_confusion_matrix.png", overwrite=True)
 
 with gr.Blocks() as demo:
     with gr.Row():
