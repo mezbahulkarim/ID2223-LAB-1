@@ -7,7 +7,7 @@ import pandas as pd
 from dotenv import load_dotenv, dotenv_values
 
 # REPLACE .env WITH YOUR OWN KEY_VALUE
-config = dotenv_values(".env")
+config = dotenv_values("../.env")
 key_value = config["KEY"]
 #print(key_value)
 
@@ -59,5 +59,5 @@ demo = gr.Interface(
     outputs="number",  # Set the output type to "number" for integer output
 )
 
-demo.launch(debug=True)
+demo.launch(debug=True, share=True)
 
