@@ -7,9 +7,11 @@ import pandas as pd
 from dotenv import load_dotenv, dotenv_values
 
 # REPLACE .env WITH YOUR OWN KEY_VALUE
-config = dotenv_values("../.env")
-key_value = config["KEY"]
+#config = dotenv_values("../.env")
+#key_value = config["KEY"]
 #print(key_value)
+
+key_value = "KEY_VALUE"
 
 project = hopsworks.login(api_key_value=key_value)
 fs = project.get_feature_store()

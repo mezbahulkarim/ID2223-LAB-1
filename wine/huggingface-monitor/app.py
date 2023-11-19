@@ -1,3 +1,10 @@
+#import os
+
+#os.system("python3 -m pip install --upgrade pip")
+#os.system("pip uninstall -y gradio")
+#os.system("pip install httpx==0.24.1")
+#os.system("pip install gradio==4.4.1")
+
 import gradio as gr
 from PIL import Image
 import hopsworks
@@ -14,10 +21,7 @@ import requests
 from dotenv import load_dotenv, dotenv_values
 import random
 
-# REPLACE .env WITH YOUR OWN KEY_VALUE
-config = dotenv_values("../.env")
-key_value = config["KEY"]
-#print(key_value)
+key_value = "KEY_VALUE"
 
 project = hopsworks.login(api_key_value=key_value)
 fs = project.get_feature_store()
@@ -54,10 +58,10 @@ with gr.Blocks() as demo:
     with gr.Row():
       with gr.Column():
           gr.Label("Today's Predicted quality")
-          input_value = gr.Text(pred_quality, elem_id="predicted-value")
+          input_value = gr.Text(pred_quality)
       with gr.Column():          
           gr.Label("Today's Actual quality")
-          input_value = gr.Text(true_quality, elem_id="actual-value")        
+          input_value = gr.Text(true_quality)        
     with gr.Row():
       with gr.Column():
           gr.Label("Recent Prediction History")
