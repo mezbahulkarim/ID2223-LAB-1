@@ -25,7 +25,17 @@ In Step 4 the trained model in Step 2 is used to make a prediction by running a 
 
 ### Gradio
 
-This is used to build the UI for the project in both /huggingface* directories.
-Run the app.py files to make a prediction on the data or to monitor the performance of the model.
+This is used to build the UI for the project in both /huggingface* and /gradio* directories.
+Run the app.py files locally from the /gradio directory to make a prediction on the data or to monitor the performance of the model locally. Furthermore, the app.py files from the /huggingface* directories can be used to run the project on huggingface.
 
+## To run the app.py files in Huggingface follow these  suggested instructions:
+
+1. Go to "https://huggingface.co/", create an account 
+2. Go to "Spaces" then "Create new Space"
+3. Give it a name and use the "Apache license 2.0"
+4. Select "Gradio" as the Space SDK. 
+5. Then create a "Private" space. 
+5. Inside your space you will see a "Files" tab, go here.
+    - Move the contents of /huggingface here to test model inference or move /huggingface-monitor to monitor the model performance. This can be done manually by "+Add file" or by cloning the space.
+6. Click "App" and see the built space.  
 
