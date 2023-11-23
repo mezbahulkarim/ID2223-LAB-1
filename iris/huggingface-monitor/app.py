@@ -1,4 +1,4 @@
-key_value = "ENTER_VALUE"
+key_value = "KEY_VALUE"
 
 import gradio as gr
 from PIL import Image

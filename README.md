@@ -1,3 +1,10 @@
+----------------------------------------------------------------------------
+# To check huggingface for iris the links are as follows:
+
+- https://huggingface.co/spaces/mezbahul/iris
+- https://huggingface.co/spaces/mezbahul/iris-monitor
+----------------------------------------------------------------------------
+
 # ID2223-LAB-1
 
 Serverless Machine Learning model trained on the Iris and Wine Quality Datasets
